@@ -15,32 +15,52 @@ import com.example.videoapp.R;
 import com.example.videoapp.object.Video;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> {
+public class FavorVideoAdapter extends RecyclerView.Adapter<FavorVideoAdapter.FavorViewHolder>{
+    @NonNull
+    @Override
+    public FavorVideoAdapter.FavorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_favor_video, parent, false);
+        return new FavorVideoAdapter.FavorViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull FavorVideoAdapter.FavorViewHolder holder, int position) {
+        Video video = videoArr.get(position);
+
+        holder.title.setText(video.getTitle());
+        holder.description.setText(video.getDescription());
+        Glide.with(context).load(video.getThumbnails()).into(holder.thumbnails);
+    }
+
+    @Override
+    public int getItemCount() {
+        return videoArr.size();
+    }
+
     private Context context;
     private ArrayList<Video> videoArr;
-    private OnItemClickListener listener;
+    private FavorVideoAdapter.OnItemClickListener listener;
 
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(FavorVideoAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }
 
-    public VideoAdapter(Context context, ArrayList<Video> videoArr) {
+    public FavorVideoAdapter(Context context, ArrayList<Video> videoArr) {
         this.context = context;
         this.videoArr = videoArr;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class FavorViewHolder extends RecyclerView.ViewHolder {
         private TextView title;
         private TextView description;
         private ImageView thumbnails;
 
-        public ViewHolder(View itemView) {
+        public FavorViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.videoTitle);
             description = itemView.findViewById(R.id.videoDescription);
@@ -58,26 +78,5 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
                 }
             });
         }
-    }
-
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_video, parent, false);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Video video = videoArr.get(position);
-
-        holder.title.setText(video.getTitle());
-        holder.description.setText(video.getDescription());
-        Glide.with(context).load(video.getThumbnails()).into(holder.thumbnails);
-    }
-
-    @Override
-    public int getItemCount() {
-        return videoArr.size();
     }
 }

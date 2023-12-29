@@ -35,7 +35,7 @@ public class JSONParse {
                 JSONObject thumbnailsObject = videoObject.getJSONObject("snippet").getJSONObject("thumbnails");
 
                 // Access the "default" object within thumbnails
-                JSONObject defaultThumbnail = thumbnailsObject.getJSONObject("maxres");
+                JSONObject defaultThumbnail = thumbnailsObject.getJSONObject("standard");
                 String thumbnailUrl = defaultThumbnail.getString("url");
 
                 // Append the extracted data to the StringBuilder

@@ -1,7 +1,8 @@
 package com.example.videoapp.api;
-import android.util.Log;
+
 import android.os.AsyncTask;
 
+import com.example.videoapp.interfaces.GetFavorVideo;
 import com.example.videoapp.interfaces.GetVideo;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -10,18 +11,16 @@ import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
 
-public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
+public class ApiGetListFavorVideo extends AsyncTask<Integer, Void, Void> {
     String data;
-    GetVideo getVideo;
-    public ApiGetListVideo(GetVideo getVideo){
-        this.getVideo = getVideo;
-        this.getVideo.batDau();
+    GetFavorVideo getFavorVideo;
+    public ApiGetListFavorVideo(GetFavorVideo getFavorVideo){
+        this.getFavorVideo = getFavorVideo;
+        this.getFavorVideo.batDau();
     }
-
-
     @Override
-    protected Void doInBackground(Integer... maxResults) {
-        int maxResultsValue = (maxResults.length > 0) ? maxResults[0] : 10;
+    protected Void doInBackground(Integer... integers) {
+        int maxResultsValue = (integers.length > 0) ? integers[0] : 10;
         System.out.println("result number: " );
         System.out.println(maxResultsValue);
         OkHttpClient client = new OkHttpClient();
@@ -41,9 +40,9 @@ public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
+    protected void onPostExecute(Void unused) {
         if(data == null){
-            this.getVideo.biLoi();
+            this.getFavorVideo.biLoi();
         }
         else {
 
@@ -55,7 +54,7 @@ public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
             // Print the parsed data to the console
             System.out.println("Parsed JSON Data:\n" + parsedData);
 
-            this.getVideo.ketThuc(parsedData);
+            this.getFavorVideo.ketThuc(parsedData);
         }
     }
 }
