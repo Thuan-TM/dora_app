@@ -16,6 +16,7 @@ public class Video implements Serializable {
         title = o.getString("title");
         description = o.getString("description");
         thumbnails = o.getString("thumbnails");
+        iframe = o.getString("iframe");
     }
     public Video(String id, String publishedAt, String title, String description, String thumbnails, String iframe) {
         this.id = id;

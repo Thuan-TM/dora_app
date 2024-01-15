@@ -43,18 +43,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     }
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {
-        private TextView contentTextView;
-        private TextView createdTextView;
+        private TextView contentTextView, createdTextView, usernameTextView;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
             contentTextView = itemView.findViewById(R.id.commentTextView);
             createdTextView = itemView.findViewById(R.id.createdTextView);
+            usernameTextView = itemView.findViewById(R.id.usernameTextView);
         }
 
         public void bind(Comment comment) {
-            contentTextView.setText(comment.getContent());
-            createdTextView.setText(comment.getCreated());
+            usernameTextView.setText(comment.getUserName().toString());
+            contentTextView.setText(comment.getContent().toString());
+            createdTextView.setText(comment.getCreated().toString());
         }
     }
 }

@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +33,7 @@ public class FavorListActivity extends AppCompatActivity implements GetFavorVide
     private FavorVideoAdapter adapter;
     private ArrayList<Video> videoArr;
     private int currentPage = 10;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +44,10 @@ public class FavorListActivity extends AppCompatActivity implements GetFavorVide
         anhXa();
         setUp();
         setClick();
-        new ApiGetListFavorVideo(this).execute();
+
+        preferences = getSharedPreferences("user_data", Context.MODE_PRIVATE);
+        String userId = preferences.getString("user_id", null);
+        new ApiGetListFavorVideo(this).execute(userId);
     }
 
     private void init() {
@@ -83,10 +89,10 @@ public class FavorListActivity extends AppCompatActivity implements GetFavorVide
     }
 
     private void loadMore() {
-        videoArr.clear();
-//        adapter.notifyDataSetChanged();
-        currentPage += 10;
-        new ApiGetListFavorVideo(this).execute(currentPage);
+//        videoArr.clear();
+////        adapter.notifyDataSetChanged();
+//        currentPage += 10;
+//        new ApiGetListFavorVideo(this).execute(currentPage);
 //        recyclerView.smoothScrollToPosition(0);
     }
 

@@ -46,4 +46,5 @@ dependencies {
     implementation("com.squareup.okhttp:okhttp:2.5.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation ("androidx.annotation:annotation:1.3.0")
+    implementation ("com.google.code.gson:gson:2.10.1")
 }

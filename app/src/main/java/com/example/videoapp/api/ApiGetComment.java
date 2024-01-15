@@ -2,6 +2,7 @@ package com.example.videoapp.api;
 import android.util.Log;
 import android.os.AsyncTask;
 
+import com.example.videoapp.interfaces.GetComment;
 import com.example.videoapp.interfaces.GetVideo;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -14,20 +15,17 @@ import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
 
-public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
+public class ApiGetComment extends AsyncTask<String, Void, Void>{
     String data;
-    GetVideo getVideo;
-    public ApiGetListVideo(GetVideo getVideo){
-        this.getVideo = getVideo;
-        this.getVideo.batDau();
+    GetComment getComment;
+    public ApiGetComment(GetComment getComment){
+        this.getComment = getComment;
+        this.getComment.batDau();
     }
 
 
     @Override
-    protected Void doInBackground(Integer... maxResults) {
-        int maxResultsValue = (maxResults.length > 0) ? maxResults[0] : 0;
-//        System.out.println("result number: " );
-//        System.out.println(maxResultsValue);
+    protected Void doInBackground(String... id) {
 
         data = null;
         try {
@@ -35,7 +33,7 @@ public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
 
             JsonObject jsonObject = new JsonObject();
 
-            jsonObject.addProperty("offset", maxResultsValue);
+            jsonObject.addProperty("y_id", id[0]);
 
             String jsonString = new Gson().toJson(jsonObject);
 
@@ -44,7 +42,7 @@ public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
             RequestBody requestBody = RequestBody.create(JSON, jsonString);
 
             Request request = new Request.Builder()
-                    .url("https://dorayaki.webi.vn/api/api_video/get_popular_list")
+                    .url("https://dorayaki.webi.vn/api/api_comment/comment_list")
                     .post(requestBody)
                     .build();
 
@@ -56,27 +54,17 @@ public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
         catch (IOException e){
             data = null;
         }
-
-//        try {
-//            Response response = client.newCall(request).execute();
-//            ResponseBody body = response.body();
-//            data = body.string();
-//
-//        } catch (IOException e){
-//            data = null;
-//        }
         return null;
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
+    protected void onPostExecute(Void result) {
+
         if(data == null){
-            this.getVideo.biLoi();
+            this.getComment.biLoi();
         }
         else {
-            System.out.println(data);
-
-            JSONParse jsonParser = new JSONParse();
+            CommentJSONParse jsonParser = new CommentJSONParse();
 
             // Call parseJson and get the parsed data
             String parsedData = jsonParser.parseJson(data);
@@ -84,7 +72,7 @@ public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
             // Print the parsed data to the console
             System.out.println("Parsed JSON Data:\n" + parsedData);
 
-            this.getVideo.ketThuc(parsedData);
+            this.getComment.ketThuc(parsedData);
         }
     }
 }

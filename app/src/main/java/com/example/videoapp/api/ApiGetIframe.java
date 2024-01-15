@@ -47,10 +47,10 @@ public class ApiGetIframe extends AsyncTask<String, Void, String> {
 
         System.out.println("Parsed JSON Data iframe:\n" + parsedData);
 
-        if (data != null) {
-            ((VideoActivity) context).processEmbedHtml(parsedData);
-        } else {
-            ((VideoActivity) context).handleError();
-        }
+//        if (data != null) {
+//            ((VideoActivity) context).processEmbedHtml(parsedData);
+//        } else {
+//            ((VideoActivity) context).handleError();
+//        }
     }
 }
