@@ -18,8 +18,7 @@ public class Register extends AppCompatActivity {
     private EditText editTextName;
     private EditText editTextUsername;
     private EditText editTextPassword;
-    private TextView loginNow;
-    private Button buttonRegister;
+    private TextView loginNow, buttonRegister;
 
     @SuppressLint("MissingInflatedId")
     @Override

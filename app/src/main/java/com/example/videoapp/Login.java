@@ -15,8 +15,7 @@ import com.example.videoapp.api.ApiLogin;
 public class Login extends AppCompatActivity {
     private EditText editTextUsername;
     private EditText editTextPassword;
-    private TextView registerNow;
-    private Button buttonLogin;
+    private TextView registerNow, buttonLogin;
 
     @SuppressLint("MissingInflatedId")
     @Override

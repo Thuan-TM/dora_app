@@ -11,41 +11,59 @@
     tools:context=".Register"
     android:orientation="vertical">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:contentDescription="Login Icon"
+        android:src="@drawable/logo" />
+
     <EditText
         android:id="@+id/editTextName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:hint="Full name"
-        android:inputType="text"/>
+        android:inputType="text"
+        android:padding="10dp"
+        android:background="@drawable/edit_text_background"/>
 
     <EditText
         android:id="@+id/editTextUsername"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="62dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/edit_text_background"
         android:hint="Username"
-        android:inputType="text"/>
+        android:inputType="text"
+        android:padding="10dp" />
 
     <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:hint="Password"
-        android:inputType="textPassword"/>
+        android:inputType="text"
+        android:padding="10dp"
+        android:background="@drawable/edit_text_background"/>
 
 
     <TextView
-        android:id="@+id/loginNow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login now"
-        android:gravity="center"
-        android:layout_marginTop="8dp"
-        android:textColor="#0879BD"/>
-    <Button
         android:id="@+id/buttonRegister"
         android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="20dp"
+        android:text="Register"
+        android:background="@drawable/button_background"
+        android:textColor="#fff"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/loginNow"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Have an account? Login now"
+        android:gravity="center"
         android:layout_marginTop="16dp"
-        android:text="Register"/>
+        android:textColor="#0879BD"/>
 </LinearLayout>
