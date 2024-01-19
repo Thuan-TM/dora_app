@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +29,12 @@ public class MainActivity extends AppCompatActivity implements GetVideo {
     private RecyclerView recyclerView;
     private VideoAdapter adapter;
     private ArrayList<Video> videoArr;
-    private int currentPage = 10;
+    private int currentPage = 0;
+    private ImageView btnSearch,btnSearch1,logo;
+    private EditText formSearch;
+    private RelativeLayout formSearchWrap;
+
+    private boolean check = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +45,30 @@ public class MainActivity extends AppCompatActivity implements GetVideo {
         anhXa();
         setUp();
         setClick();
-        new ApiGetListVideo(this).execute();
+        new ApiGetListVideo(this).execute("0","");
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (check) {
+                    formSearchWrap.setVisibility(View.VISIBLE);
+                } else {
+                    formSearchWrap.setVisibility(View.GONE);
+                }
+                check = !check;
+            }
+        });
+
     }
 
     private void init() {
         videoArr = new ArrayList<>();
+        btnSearch = findViewById(R.id.ic_search);
+        btnSearch1 = findViewById(R.id.btnSearch1);
+        logo = findViewById(R.id.logo);
+        formSearch = findViewById(R.id.formSearch);
+        formSearchWrap = findViewById(R.id.formSearchWrap);
+        formSearchWrap.setVisibility(View.GONE);
     }
 
     private void anhXa() {
@@ -56,6 +82,29 @@ public class MainActivity extends AppCompatActivity implements GetVideo {
     }
 
     private void setClick() {
+//      action search
+        btnSearch1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String s =  formSearch.getText().toString();
+                currentPage = 0;
+                new ApiGetListVideo(MainActivity.this).execute(String.valueOf(currentPage),s);
+                formSearchWrap.setVisibility(View.GONE);
+
+            }
+        });
+
+//    go back home
+        logo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String s =  "";
+                currentPage = 0;
+                new ApiGetListVideo(MainActivity.this).execute(String.valueOf(currentPage),"");
+            }
+        });
+
+
 //        ImageView prevButton = findViewById(R.id.prevButton);
 //        ImageView nextButton = findViewById(R.id.nextButton);
 //
@@ -112,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements GetVideo {
         videoArr.clear();
 //        adapter.notifyDataSetChanged();
         currentPage += 10;
-        new ApiGetListVideo(this).execute(currentPage);
+        new ApiGetListVideo(this).execute(String.valueOf(currentPage),"");
 //        recyclerView.smoothScrollToPosition(0);
     }
 

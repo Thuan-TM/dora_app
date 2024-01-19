@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.example.videoapp.interfaces.GetFavorVideo;
 import com.example.videoapp.interfaces.GetVideo;
+import com.example.videoapp.object.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.squareup.okhttp.MediaType;
@@ -33,9 +34,13 @@ public class ApiGetListFavorVideo extends AsyncTask<String, Void, Void>{
 
             JsonObject jsonObject = new JsonObject();
 
-            jsonObject.addProperty("u_id", id[0]);
+            jsonObject.addProperty("u_id", User.getCurrent_id());
+
+
 
             String jsonString = new Gson().toJson(jsonObject);
+
+            System.out.println(jsonString);
 
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -68,6 +73,8 @@ public class ApiGetListFavorVideo extends AsyncTask<String, Void, Void>{
 
     @Override
     protected void onPostExecute(Void aVoid) {
+        System.out.println("dâta resutl");
+        System.out.println(data);
         if(data == null){
             this.getVideo.biLoi();
         }

@@ -45,9 +45,9 @@ public class FavorListActivity extends AppCompatActivity implements GetFavorVide
         setUp();
         setClick();
 
-        preferences = getSharedPreferences("user_data", Context.MODE_PRIVATE);
-        String userId = preferences.getString("user_id", null);
-        new ApiGetListFavorVideo(this).execute(userId);
+//        preferences = getSharedPreferences("user_data", Context.MODE_PRIVATE);
+//        String userId = preferences.getString("user_id", null);
+        new ApiGetListFavorVideo(this).execute();
     }
 
     private void init() {

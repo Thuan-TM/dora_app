@@ -22,24 +22,26 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class ApiLogin extends AsyncTask<String, Void, String> {
+public class ApiHandleLove extends AsyncTask<String, Void, String> {
 
     private Context context;
 
-    public ApiLogin(Context context) {
+    public ApiHandleLove(Context context) {
         this.context = context;
     }
     @Override
     protected String doInBackground(String... params) {
-        String username = params[0];
-        String password = params[1];
+        int u_id = User.getCurrent_id();
+        String y_id = params[0];
+        String status = params[1];
 
         try {
             OkHttpClient client = new OkHttpClient();
 
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("user_name", username);
-            jsonObject.addProperty("pass", password);
+            jsonObject.addProperty("u_id", u_id);
+            jsonObject.addProperty("y_id", y_id);
+            jsonObject.addProperty("status", status);
 
             String jsonString = new Gson().toJson(jsonObject);
 
@@ -49,7 +51,7 @@ public class ApiLogin extends AsyncTask<String, Void, String> {
 
             System.out.println(requestBody);
             Request request = new Request.Builder()
-                    .url("https://dorayaki.webi.vn/api/api_user/user_login")
+                    .url("https://dorayaki.webi.vn/api/api_user/handle_video_love")
                     .post(requestBody)
                     .build();
 
@@ -77,22 +79,8 @@ public class ApiLogin extends AsyncTask<String, Void, String> {
                 String resValue = parsedJsonObject.getString("res");
                 if ("done".equals(resValue)) {
                     String msgValue = parsedJsonObject.getString("msg");
-                    JSONObject data = parsedJsonObject.optJSONObject("data");
-
                     Toast.makeText(context, msgValue, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context, MainActivity.class);
-                    context.startActivity(intent);
 
-
-                    SharedPreferences preferences = context.getSharedPreferences("user_data", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-
-                    editor.putString("user_id", data.optString("id"));
-                    editor.putString("user_avatar", data.optString("avatar"));
-                    editor.putString("user_fullname", data.optString("fullname"));
-                    editor.apply();
-                    System.out.println(editor);
-                    User.setCurrent_id(Integer.parseInt(data.optString("id")));
 
                 } else {
                     String errorMessage = parsedJsonObject.getString("msg");

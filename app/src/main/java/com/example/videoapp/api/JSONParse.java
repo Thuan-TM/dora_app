@@ -32,7 +32,7 @@ public class JSONParse {
                 String description = videoObject.getString("description");
                 String iframe = videoObject.getString("iframe");
                 String thumbnailUrl = videoObject.getString("thumbnails");
-
+                String is_love = videoObject.getString("is_love");
 
                 JSONObject simplifiedJson = new JSONObject();
                 simplifiedJson.put("id", id);
@@ -41,7 +41,7 @@ public class JSONParse {
                 simplifiedJson.put("description", description);
                 simplifiedJson.put("thumbnails", thumbnailUrl);
                 simplifiedJson.put("iframe", iframe);
-
+                simplifiedJson.put("is_love", is_love);
                 simplifiedArray.add(simplifiedJson);
 //                System.out.println("json data parse: "+simplifiedJson);
             }

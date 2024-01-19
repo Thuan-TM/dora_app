@@ -3,6 +3,7 @@ import android.util.Log;
 import android.os.AsyncTask;
 
 import com.example.videoapp.interfaces.GetVideo;
+import com.example.videoapp.object.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.squareup.okhttp.MediaType;
@@ -14,7 +15,7 @@ import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
 
-public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
+public class ApiGetListVideo extends AsyncTask<String, Void, Void>{
     String data;
     GetVideo getVideo;
     public ApiGetListVideo(GetVideo getVideo){
@@ -24,8 +25,12 @@ public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
 
 
     @Override
-    protected Void doInBackground(Integer... maxResults) {
-        int maxResultsValue = (maxResults.length > 0) ? maxResults[0] : 0;
+    protected Void doInBackground(String... maxResults) {
+        String maxResultsValue =maxResults[0];
+        String search = maxResults[1];
+        Integer u_id = User.current_id;
+
+        System.out.println(u_id);
 //        System.out.println("result number: " );
 //        System.out.println(maxResultsValue);
 
@@ -36,6 +41,10 @@ public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
             JsonObject jsonObject = new JsonObject();
 
             jsonObject.addProperty("offset", maxResultsValue);
+
+            jsonObject.addProperty("search", search);
+
+            jsonObject.addProperty("u_id", u_id);
 
             String jsonString = new Gson().toJson(jsonObject);
 

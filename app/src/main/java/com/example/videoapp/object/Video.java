@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class Video implements Serializable {
     private String id, publishedAt, title, description, thumbnails, iframe;
-
+    private int is_love;
 
     public Video(){}
     public Video(JSONObject o) throws JSONException {
@@ -17,14 +17,16 @@ public class Video implements Serializable {
         description = o.getString("description");
         thumbnails = o.getString("thumbnails");
         iframe = o.getString("iframe");
+        is_love = Integer.parseInt(o.getString("is_love"));
     }
-    public Video(String id, String publishedAt, String title, String description, String thumbnails, String iframe) {
+    public Video(String id, String publishedAt, String title, String description, String thumbnails, String iframe,int  is_love) {
         this.id = id;
         this.publishedAt = publishedAt;
         this.title = title;
         this.description = description;
         this.thumbnails = thumbnails;
         this.iframe = iframe;
+        this.is_love = is_love;
     }
 
     public String getId() {
@@ -72,5 +74,13 @@ public class Video implements Serializable {
 
     public void setIframe(String iframe) {
         this.iframe = iframe;
+    }
+
+    public int getIs_love() {
+        return is_love;
+    }
+
+    public void setIs_love(int is_love) {
+        this.is_love = is_love;
     }
 }

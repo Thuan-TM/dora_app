@@ -35,10 +35,10 @@ public class CommentJSONParse {
                 String username = commentObj.getJSONObject("User").getString("fullname");
                 String avatarUser = commentObj.getJSONObject("User").getString("avatar");
 
-                long timestamp = Integer.parseInt(created) * 1000;
-                Date date = new Date(timestamp);
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                String formattedDate = sdf.format(date);
+//                long timestamp = Integer.parseInt(created) * 1000;
+//                Date date = new Date(timestamp);
+//                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+//                String formattedDate = sdf.format(date);
 
 
 
@@ -46,7 +46,7 @@ public class CommentJSONParse {
                 simplifiedJson.put("id", Integer.parseInt(id));
                 simplifiedJson.put("uid", Integer.parseInt(uid));
                 simplifiedJson.put("content", content);
-                simplifiedJson.put("created", formattedDate);
+                simplifiedJson.put("created", created);
                 simplifiedJson.put("username", username);
                 simplifiedJson.put("avatarUser", avatarUser);
 

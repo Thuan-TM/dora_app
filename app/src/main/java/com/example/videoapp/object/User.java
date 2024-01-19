@@ -3,6 +3,9 @@ package com.example.videoapp.object;
 public class User {
     Integer id;
     String username, avatar, fullname, password, token;
+
+    public static Integer current_id = 0;
+
     public User(){}
 
     public User(Integer id, String avatar, String fullname, String username, String password, String token) {
@@ -12,6 +15,8 @@ public class User {
         this.fullname = fullname;
         this.password = password;
         this.token = token;
+
+        this.current_id = id;
     }
 
     public String getPassword() {
@@ -24,6 +29,14 @@ public class User {
 
     public String getToken() {
         return token;
+    }
+
+    public static Integer getCurrent_id() {
+        return current_id;
+    }
+
+    public static void setCurrent_id(Integer current_id) {
+        User.current_id = current_id;
     }
 
     public void setToken(String token) {
