@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.videoapp.adapter.VideoAdapter;
 import com.example.videoapp.api.ApiGetListVideo;
+import com.example.videoapp.broadcast.NetworkReceiver;
 import com.example.videoapp.interfaces.GetVideo;
 import com.example.videoapp.object.Video;
 
@@ -25,7 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements GetVideo {
-
+    private NetworkReceiver network;
     private RecyclerView recyclerView;
     private VideoAdapter adapter;
     private ArrayList<Video> videoArr;
@@ -62,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements GetVideo {
     }
 
     private void init() {
+//      khoi tao broadcast
+        network = new NetworkReceiver(MainActivity.this);
+
         videoArr = new ArrayList<>();
         btnSearch = findViewById(R.id.ic_search);
         btnSearch1 = findViewById(R.id.btnSearch1);
@@ -88,7 +92,12 @@ public class MainActivity extends AppCompatActivity implements GetVideo {
             public void onClick(View v) {
                 String s =  formSearch.getText().toString();
                 currentPage = 0;
+                if (NetworkReceiver.isIs_check_network() == false){
+                    Toast.makeText(MainActivity.this, "mạng không khả dụng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 new ApiGetListVideo(MainActivity.this).execute(String.valueOf(currentPage),s);
+
                 formSearchWrap.setVisibility(View.GONE);
 
             }
@@ -100,6 +109,11 @@ public class MainActivity extends AppCompatActivity implements GetVideo {
             public void onClick(View v) {
                 String s =  "";
                 currentPage = 0;
+
+                if (NetworkReceiver.isIs_check_network() == false){
+                    Toast.makeText(MainActivity.this, "mạng không khả dụng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 new ApiGetListVideo(MainActivity.this).execute(String.valueOf(currentPage),"");
             }
         });
@@ -147,6 +161,10 @@ public class MainActivity extends AppCompatActivity implements GetVideo {
         adapter.setOnItemClickListener(new VideoAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
+                if (NetworkReceiver.isIs_check_network() == false){
+                    Toast.makeText(MainActivity.this, "mạng không khả dụng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Video video = videoArr.get(position);
                 Bundle b = new Bundle();
                 b.putSerializable("video", video);
@@ -161,12 +179,20 @@ public class MainActivity extends AppCompatActivity implements GetVideo {
         videoArr.clear();
 //        adapter.notifyDataSetChanged();
         currentPage += 10;
+        if (NetworkReceiver.isIs_check_network() == false){
+            Toast.makeText(MainActivity.this, "mạng không khả dụng", Toast.LENGTH_SHORT).show();
+            return;
+        }
         new ApiGetListVideo(this).execute(String.valueOf(currentPage),"");
 //        recyclerView.smoothScrollToPosition(0);
     }
 
     @Override
     public void batDau() {
+        if (NetworkReceiver.isIs_check_network() == false){
+            Toast.makeText(MainActivity.this, "mạng không khả dụng", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Toast.makeText(this, "Đang lấy dữ liệu", Toast.LENGTH_SHORT).show();
     }
 
@@ -188,5 +214,18 @@ public class MainActivity extends AppCompatActivity implements GetVideo {
     @Override
     public void biLoi() {
         Toast.makeText(this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        network.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        network.stop();
     }
 }

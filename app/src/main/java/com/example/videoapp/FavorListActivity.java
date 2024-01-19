@@ -17,6 +17,7 @@ import com.example.videoapp.adapter.FavorVideoAdapter;
 import com.example.videoapp.adapter.VideoAdapter;
 import com.example.videoapp.api.ApiGetListFavorVideo;
 import com.example.videoapp.api.ApiGetListVideo;
+import com.example.videoapp.broadcast.NetworkReceiver;
 import com.example.videoapp.interfaces.GetFavorVideo;
 import com.example.videoapp.interfaces.GetVideo;
 import com.example.videoapp.object.Video;
@@ -28,7 +29,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class FavorListActivity extends AppCompatActivity implements GetFavorVideo {
-
+    private NetworkReceiver network;
     private RecyclerView recyclerView;
     private FavorVideoAdapter adapter;
     private ArrayList<Video> videoArr;
@@ -52,9 +53,12 @@ public class FavorListActivity extends AppCompatActivity implements GetFavorVide
 
     private void init() {
         videoArr = new ArrayList<>();
+
+        network = new NetworkReceiver(this);
     }
 
     private void anhXa() {
+
         recyclerView = findViewById(R.id.recyclerViewVideoList);
     }
 
@@ -70,6 +74,10 @@ public class FavorListActivity extends AppCompatActivity implements GetFavorVide
         loadMoreText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (NetworkReceiver.isIs_check_network() == false){
+                    Toast.makeText(FavorListActivity.this, "mạng không khả dụng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 loadMore();
             }
         });
@@ -78,6 +86,10 @@ public class FavorListActivity extends AppCompatActivity implements GetFavorVide
         adapter.setOnItemClickListener(new FavorVideoAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
+                if (NetworkReceiver.isIs_check_network() == false){
+                    Toast.makeText(FavorListActivity.this, "mạng không khả dụng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Video video = videoArr.get(position);
                 Bundle b = new Bundle();
                 b.putSerializable("video", video);
@@ -98,6 +110,7 @@ public class FavorListActivity extends AppCompatActivity implements GetFavorVide
 
     @Override
     public void batDau() {
+
         Toast.makeText(this, "Đang lấy dữ liệu", Toast.LENGTH_SHORT).show();
     }
 
@@ -119,5 +132,17 @@ public class FavorListActivity extends AppCompatActivity implements GetFavorVide
     @Override
     public void biLoi() {
         Toast.makeText(this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        network.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        network.stop();
     }
 }

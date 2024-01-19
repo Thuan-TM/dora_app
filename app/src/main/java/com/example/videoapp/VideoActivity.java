@@ -22,6 +22,7 @@ import com.example.videoapp.api.ApiGetIframe;
 import com.example.videoapp.api.ApiGetListVideo;
 import com.example.videoapp.api.ApiHandleLove;
 import com.example.videoapp.api.ApiSendComment;
+import com.example.videoapp.broadcast.NetworkReceiver;
 import com.example.videoapp.interfaces.GetComment;
 import com.example.videoapp.object.Comment;
 import com.example.videoapp.object.Video;
@@ -33,7 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class VideoActivity extends AppCompatActivity implements GetComment {
-
+    private NetworkReceiver network;
     private ImageView videoThumbnails, btnSend,is_love, ic_user, logo;
     private TextView videoTitle;
     private TextView videoDescription;
@@ -60,6 +61,8 @@ public class VideoActivity extends AppCompatActivity implements GetComment {
     }
 
     private void init() {
+
+        network = new NetworkReceiver(this);
 
         Bundle b = getIntent().getBundleExtra("data");
         video = (Video) b.getSerializable("video");
@@ -113,6 +116,10 @@ public class VideoActivity extends AppCompatActivity implements GetComment {
         is_love.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (NetworkReceiver.isIs_check_network() == false){
+                    Toast.makeText(VideoActivity.this, "mạng không khả dụng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if(is_love_check){
                     new ApiHandleLove(VideoActivity.this).execute(video.getId(), "0");
                     is_love_check = false;
@@ -130,7 +137,10 @@ public class VideoActivity extends AppCompatActivity implements GetComment {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (NetworkReceiver.isIs_check_network() == false){
+                    Toast.makeText(VideoActivity.this, "mạng không khả dụng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 preferences = getSharedPreferences("user_data", Context.MODE_PRIVATE);
                 String userId = preferences.getString("user_id", null);
                 String content = String.valueOf(editTextComment.getText());
@@ -146,6 +156,10 @@ public class VideoActivity extends AppCompatActivity implements GetComment {
         logo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (NetworkReceiver.isIs_check_network() == false){
+                    Toast.makeText(VideoActivity.this, "mạng không khả dụng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent intent = new Intent(VideoActivity.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -154,6 +168,10 @@ public class VideoActivity extends AppCompatActivity implements GetComment {
         ic_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (NetworkReceiver.isIs_check_network() == false){
+                    Toast.makeText(VideoActivity.this, "mạng không khả dụng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent intent = new Intent(VideoActivity.this, SettingActivity.class);
                 startActivity(intent);
             }
@@ -177,6 +195,10 @@ public class VideoActivity extends AppCompatActivity implements GetComment {
 
     @Override
     public void batDau() {
+        if (NetworkReceiver.isIs_check_network() == false){
+            Toast.makeText(VideoActivity.this, "mạng không khả dụng", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Toast.makeText(this, "Dang lay ve", Toast.LENGTH_SHORT).show();
     }
 
@@ -211,4 +233,16 @@ public class VideoActivity extends AppCompatActivity implements GetComment {
 //            }
 //        }.execute(video.getId());
 //    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        network.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        network.stop();
+    }
 }

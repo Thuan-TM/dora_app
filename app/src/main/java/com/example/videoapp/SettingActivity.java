@@ -12,11 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.videoapp.adapter.VideoAdapter;
+import com.example.videoapp.broadcast.NetworkReceiver;
+import com.example.videoapp.object.User;
 import com.example.videoapp.object.Video;
 
 public class SettingActivity extends AppCompatActivity {
     private SharedPreferences preferences;
-
+    private NetworkReceiver network;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,8 +30,11 @@ public class SettingActivity extends AppCompatActivity {
         String userId = preferences.getString("user_id", null);
         String userName = preferences.getString("user_fullname", null);
 
+        String name = User.getCurrent_fullname();
+        String des = User.getCurrent_des();
+
         TextView usernameTextView = findViewById(R.id.usernameTextView);
-        usernameTextView.setText(userName);
+        usernameTextView.setText(name);
     }
 
     private void setClick() {

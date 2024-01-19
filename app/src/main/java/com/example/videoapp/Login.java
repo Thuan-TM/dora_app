@@ -9,10 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.videoapp.api.ApiLogin;
+import com.example.videoapp.broadcast.NetworkReceiver;
 
 public class Login extends AppCompatActivity {
+    private NetworkReceiver network;
     private EditText editTextUsername;
     private EditText editTextPassword;
     private TextView registerNow, buttonLogin;
@@ -28,6 +31,8 @@ public class Login extends AppCompatActivity {
         registerNow = findViewById(R.id.registerNow);
         buttonLogin = findViewById(R.id.buttonLogin);
 
+        network = new NetworkReceiver(this);
+
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -35,6 +40,10 @@ public class Login extends AppCompatActivity {
                 String username = editTextUsername.getText().toString();
                 String password = editTextPassword.getText().toString();
 
+                if (NetworkReceiver.isIs_check_network() == false){
+                    Toast.makeText(Login.this, "mạng không khả dụng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 new ApiLogin(Login.this).execute(username, password);
 
             }
@@ -47,5 +56,16 @@ public class Login extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        network.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        network.stop();
     }
 }
