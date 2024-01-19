@@ -2,21 +2,37 @@ package com.example.videoapp.object;
 
 public class User {
     Integer id;
-    String username, avatar, fullname, password, token;
+    String username, avatar, fullname, password, token,description;
 
     public static Integer current_id = 0;
-
+    public static String current_des = "";
+    public static String current_fullname = "";
     public User(){}
 
-    public User(Integer id, String avatar, String fullname, String username, String password, String token) {
+    public static String getCurrent_des() {
+        return current_des;
+    }
+
+    public static void setCurrent_des(String current_des) {
+        User.current_des = current_des;
+    }
+
+    public static String getCurrent_fullname() {
+        return current_fullname;
+    }
+
+    public static void setCurrent_fullname(String current_fullname) {
+        User.current_fullname = current_fullname;
+    }
+
+    public User(Integer id, String avatar, String fullname, String username, String password, String token, String description) {
         this.id = id;
         this.username = username;
         this.avatar = avatar;
         this.fullname = fullname;
         this.password = password;
         this.token = token;
-
-        this.current_id = id;
+        this.description = description;
     }
 
     public String getPassword() {
@@ -41,6 +57,14 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getAvatar() {

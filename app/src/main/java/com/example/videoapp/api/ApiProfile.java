@@ -21,25 +21,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-
-public class ApiLogin extends AsyncTask<String, Void, String> {
-
+public class ApiProfile extends AsyncTask<String, Void, String> {
     private Context context;
 
-    public ApiLogin(Context context) {
+    public ApiProfile(Context context) {
         this.context = context;
     }
     @Override
     protected String doInBackground(String... params) {
         String username = params[0];
-        String password = params[1];
-
+        String description = params[1];
+        Integer id = User.getCurrent_id();
+        System.out.println(username);
+        System.out.println(description);
         try {
             OkHttpClient client = new OkHttpClient();
 
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("user_name", username);
-            jsonObject.addProperty("pass", password);
+            jsonObject.addProperty("u_id", id);
+            jsonObject.addProperty("fullname", username);
+            jsonObject.addProperty("description", description);
 
             String jsonString = new Gson().toJson(jsonObject);
 
@@ -49,7 +50,7 @@ public class ApiLogin extends AsyncTask<String, Void, String> {
 
             System.out.println(requestBody);
             Request request = new Request.Builder()
-                    .url("https://dorayaki.webi.vn/api/api_user/user_login")
+                    .url("https://dorayaki.webi.vn/api/api_user/user_update")
                     .post(requestBody)
                     .build();
 
@@ -102,12 +103,14 @@ public class ApiLogin extends AsyncTask<String, Void, String> {
                 }
             } else {
                 // Handle the case where parsing failed
-                Toast.makeText(context, "Tài khoản hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Bị lỗi rồi", Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             e.printStackTrace();
             // Handle the case where parsing the result string to JSONObject failed
-            Toast.makeText(context, "Tài khoản hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Bị lỗi rồi", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }
