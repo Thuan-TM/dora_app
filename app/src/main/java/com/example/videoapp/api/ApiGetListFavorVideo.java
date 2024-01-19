@@ -2,6 +2,7 @@ package com.example.videoapp.api;
 import android.util.Log;
 import android.os.AsyncTask;
 
+import com.example.videoapp.interfaces.GetFavorVideo;
 import com.example.videoapp.interfaces.GetVideo;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -14,20 +15,17 @@ import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
 
-public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
+public class ApiGetListFavorVideo extends AsyncTask<String, Void, Void>{
     String data;
-    GetVideo getVideo;
-    public ApiGetListVideo(GetVideo getVideo){
+    GetFavorVideo getVideo;
+    public ApiGetListFavorVideo(GetFavorVideo getVideo){
         this.getVideo = getVideo;
         this.getVideo.batDau();
     }
 
 
     @Override
-    protected Void doInBackground(Integer... maxResults) {
-        int maxResultsValue = (maxResults.length > 0) ? maxResults[0] : 0;
-//        System.out.println("result number: " );
-//        System.out.println(maxResultsValue);
+    protected Void doInBackground(String... id) {
 
         data = null;
         try {
@@ -35,7 +33,7 @@ public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
 
             JsonObject jsonObject = new JsonObject();
 
-            jsonObject.addProperty("offset", maxResultsValue);
+            jsonObject.addProperty("u_id", id[0]);
 
             String jsonString = new Gson().toJson(jsonObject);
 
@@ -44,7 +42,7 @@ public class ApiGetListVideo extends AsyncTask<Integer, Void, Void>{
             RequestBody requestBody = RequestBody.create(JSON, jsonString);
 
             Request request = new Request.Builder()
-                    .url("https://dorayaki.webi.vn/api/api_video/get_popular_list")
+                    .url("https://dorayaki.webi.vn/api/api_user/user_video_love")
                     .post(requestBody)
                     .build();
 

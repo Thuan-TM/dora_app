@@ -4,15 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.videoapp.adapter.FavorVideoAdapter;
 import com.example.videoapp.adapter.VideoAdapter;
+import com.example.videoapp.api.ApiGetListFavorVideo;
 import com.example.videoapp.api.ApiGetListVideo;
+import com.example.videoapp.interfaces.GetFavorVideo;
 import com.example.videoapp.interfaces.GetVideo;
 import com.example.videoapp.object.Video;
 
@@ -22,23 +27,27 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements GetVideo {
+public class FavorListActivity extends AppCompatActivity implements GetFavorVideo {
 
     private RecyclerView recyclerView;
-    private VideoAdapter adapter;
+    private FavorVideoAdapter adapter;
     private ArrayList<Video> videoArr;
     private int currentPage = 10;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_favor_list);
 
         init();
         anhXa();
         setUp();
         setClick();
-        new ApiGetListVideo(this).execute();
+
+        preferences = getSharedPreferences("user_data", Context.MODE_PRIVATE);
+        String userId = preferences.getString("user_id", null);
+        new ApiGetListFavorVideo(this).execute(userId);
     }
 
     private void init() {
@@ -50,36 +59,14 @@ public class MainActivity extends AppCompatActivity implements GetVideo {
     }
 
     private void setUp() {
-        adapter = new VideoAdapter(this, videoArr);
+        adapter = new FavorVideoAdapter(this, videoArr);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
 
     private void setClick() {
-//        ImageView prevButton = findViewById(R.id.prevButton);
-//        ImageView nextButton = findViewById(R.id.nextButton);
-//
-//        prevButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                currentPage -= 10;
-//                if (currentPage < 0) {
-//                    currentPage = 0;
-//                }
-//                loadMore();
-//            }
-//        });
-//
-//        nextButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                currentPage += 10;
-//                loadMore();
-//            }
-//        });
 
         TextView loadMoreText = findViewById(R.id.loadMore);
-        ImageView userIcon = findViewById(R.id.ic_user);
         loadMoreText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,21 +74,14 @@ public class MainActivity extends AppCompatActivity implements GetVideo {
             }
         });
 
-        userIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
-                startActivity(intent);
-            }
-        });
 
-        adapter.setOnItemClickListener(new VideoAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new FavorVideoAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Video video = videoArr.get(position);
                 Bundle b = new Bundle();
                 b.putSerializable("video", video);
-                Intent intent = new Intent(MainActivity.this, VideoActivity.class);
+                Intent intent = new Intent(FavorListActivity.this, VideoActivity.class);
                 intent.putExtra("data", b);
                 startActivity(intent);
             }
@@ -109,10 +89,10 @@ public class MainActivity extends AppCompatActivity implements GetVideo {
     }
 
     private void loadMore() {
-        videoArr.clear();
-//        adapter.notifyDataSetChanged();
-        currentPage += 10;
-        new ApiGetListVideo(this).execute(currentPage);
+//        videoArr.clear();
+////        adapter.notifyDataSetChanged();
+//        currentPage += 10;
+//        new ApiGetListFavorVideo(this).execute(currentPage);
 //        recyclerView.smoothScrollToPosition(0);
     }
 
